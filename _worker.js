@@ -80,7 +80,6 @@ export default {
       while ((ipv6Set.size < 10 || ipv4Set.size < 10) && attempts < 20) {
         const ipv6 = await fetchIPv6(domain, dns64);
         if (ipv6 && ipv6Set.size < 10) ipv6Set.add(ipv6);
-        // Hardcoded fallback IPv4
         if (ipv4Set.size < 10) ipv4Set.add("104.21.83.117");
         attempts++;
       }
@@ -104,7 +103,7 @@ export default {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>NAT64 Checker</title>
+  <title>NAT64 检测</title>
   <style>
     body { font-family: sans-serif; padding: 2em; }
     textarea { width: 100%; height: 8em; margin: 1em 0; }
@@ -128,7 +127,8 @@ export default {
       e.preventDefault();
       const domain = e.target.domain.value;
       const dns64 = e.target.dns64.value;
-      const res = await fetch(`/check?domain=${encodeURIComponent(domain)}&dns64=${encodeURIComponent(dns64)}`);
+      const url = '/check?domain=' + encodeURIComponent(domain) + '&dns64=' + encodeURIComponent(dns64);
+      const res = await fetch(url);
       const data = await res.json();
       document.getElementById('ipv6').value = data.ipv6.join("\n");
       document.getElementById('ipv4').value = data.ipv4.join("\n");
